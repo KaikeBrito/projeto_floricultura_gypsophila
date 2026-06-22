@@ -1,0 +1,36 @@
+# Dependências
+node_modules/
+
+# Ambiente e segredos
+.env
+.env.local
+.env.*.local
+backend/.env
+
+# Build e cache
+.next/
+out/
+dist/
+build/
+.cache/
+.tmp/
+
+# Strapi
+backend/public/uploads/*
+!backend/public/uploads/.gitkeep
+backend/.strapi/
+backend/exports/
+
+# Docker / infra
+backend/backups/
+backend/nginx/certs/
+
+# Logs e SO
+*.log
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
