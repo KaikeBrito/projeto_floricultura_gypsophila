@@ -48,6 +48,14 @@ export interface Banner {
   ordem?: number;
 }
 
+export interface Pagina {
+  id: number;
+  titulo: string;
+  slug: string;
+  conteudo: string;
+  seo?: SeoComponent | null;
+}
+
 export interface ConfiguracoesGerais {
   nomeFantasia: string;
   endereco: string;
@@ -62,12 +70,7 @@ export interface ConfiguracoesGerais {
 export interface StrapiListResponse<T> {
   data: T[];
   meta?: {
-    pagination?: {
-      page: number;
-      pageSize: number;
-      pageCount: number;
-      total: number;
-    };
+    pagination?: { page: number; pageSize: number; pageCount: number; total: number };
   };
 }
 

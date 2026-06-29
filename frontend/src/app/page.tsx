@@ -1,49 +1,38 @@
+import type { Metadata } from "next";
+import { CategoryNav } from "@/components/CategoryNav";
 import { ProductCard } from "@/components/ProductCard";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
-import { getConfiguracoes, getProdutos } from "@/lib/strapi";
-import { buildWhatsAppUrl } from "@/lib/whatsapp";
+import { getCategorias, getProdutos } from "@/lib/strapi";
 
-export default async function HomePage() {
-  const [produtos, config] = await Promise.all([
-    getProdutos({ destaque: true }).catch(() => []),
-    getConfiguracoes().catch(() => null),
+export const metadata: Metadata = {
+  title: "Flores e Arranjos",
+  description:
+    "Buquês, arranjos, cestas e coroas da Floricultura Gypsophila. Escolha e finalize o pedido pelo WhatsApp.",
+};
+
+export default async function CatalogoPage() {
+  const [produtos, categorias] = await Promise.all([
+    getProdutos().catch(() => []),
+    getCategorias().catch(() => []),
   ]);
-
-  const whatsappGlobal =
-    config?.whatsappNumero
-      ? buildWhatsAppUrl(
-          config.whatsappNumero,
-          config.mensagemPadraoWhatsApp ?? "Olá! Vim pelo site e gostaria de mais informações."
-        )
-      : null;
 
   return (
     <>
-      <section className="hero">
-        <h1>Flores para cada momento</h1>
-        <p>Buquês, arranjos e presentes florais — Aldeota, Fortaleza</p>
-        {whatsappGlobal && (
-          <p style={{ marginTop: "1.5rem" }}>
-            <WhatsAppButton href={whatsappGlobal} />
-          </p>
-        )}
-      </section>
+      <header className="page-head">
+        <h1>Flores e Arranjos</h1>
+        <p>Escolha um arranjo e finalize o pedido pelo WhatsApp.</p>
+      </header>
 
-      <section>
-        <h2>Destaques</h2>
-        {produtos.length === 0 ? (
-          <p className="empty-state">
-            Nenhum produto em destaque. Cadastre itens no painel Strapi com &quot;destaque&quot;
-            ativo.
-          </p>
-        ) : (
-          <div className="product-grid">
-            {produtos.map((produto) => (
-              <ProductCard key={produto.id} produto={produto} />
-            ))}
-          </div>
-        )}
-      </section>
+      <CategoryNav categorias={categorias} />
+
+      {produtos.length === 0 ? (
+        <p className="empty-state">Nenhum produto disponível no momento.</p>
+      ) : (
+        <div className="product-grid">
+          {produtos.map((produto) => (
+            <ProductCard key={produto.id} produto={produto} />
+          ))}
+        </div>
+      )}
     </>
   );
 }
